@@ -1,20 +1,22 @@
 #pragma once
-#include<base/container/List.h>
-#include<base/Wrapper.h>
-#include<iostream>
-#include<jccpp/define.h>
-#include<libusb-1.0/libusb.h>
-#include<libusb-wrapper/UsbConfigDescriptorWrapper.h>
-#include<libusb-wrapper/USBRequestOptions.h>
-#include<memory>
-#include<vector>
+#include <base/Wrapper.h>
+#include <base/container/List.h>
+#include <base/string/define.h>
+#include <iostream>
+#include <libusb-1.0/libusb.h>
+#include <libusb-wrapper/USBRequestOptions.h>
+#include <libusb-wrapper/UsbConfigDescriptorWrapper.h>
+#include <memory>
+#include <vector>
 
 using std::shared_ptr;
 
 namespace libusb
 {
-	class UsbDeviceWrapper :public base::Wrapper<libusb_device>
+	class UsbDeviceWrapper
+		: public base::Wrapper<libusb_device>
 	{
+	private:
 		libusb_device *_wrapped_obj = nullptr;
 		shared_ptr<libusb_device_handle> _device_handle = nullptr;
 
@@ -25,7 +27,7 @@ namespace libusb
 		/// <summary>
 		///		默认构造函数。此时并没有实际指向任何一个 USB 设备，所以调用任何方法都将引发异常。
 		/// </summary>
-		UsbDeviceWrapper() { }
+		UsbDeviceWrapper() {}
 		UsbDeviceWrapper(libusb_device *device);
 		UsbDeviceWrapper(UsbDeviceWrapper const &other);
 		~UsbDeviceWrapper();
@@ -74,8 +76,7 @@ namespace libusb
 			uint16_t index,
 			uint8_t *data,
 			uint16_t length,
-			uint32_t timeout
-		);
+			uint32_t timeout);
 
 		/// <summary>
 		///		获取状态代码。需要打开设备。
