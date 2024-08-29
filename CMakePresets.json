@@ -7,7 +7,6 @@
 			"generator": "Ninja",
 			"binaryDir": "${sourceDir}/jc_build",
 			"cacheVariables": {
-				"cpp_lib_build_scripts_path": "$env{cpp_lib_build_scripts_path}",
 				"platform": "msys",
 				"BUILD_SHARED_LIBS": true,
 				"CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
@@ -59,7 +58,6 @@
 			"binaryDir": "${sourceDir}/jc_build",
 			"cacheVariables": {
 				"option_install_headers": true,
-				"cpp_lib_build_scripts_path": "$env{cpp_lib_build_scripts_path}",
 				"platform": "arm-none-eabi-cortex-m3",
 				"BUILD_SHARED_LIBS": false,
 				"CMAKE_SYSTEM_PROCESSOR": "arm",
@@ -102,7 +100,6 @@
 			"binaryDir": "${sourceDir}/jc_build",
 			"cacheVariables": {
 				"option_install_headers": true,
-				"cpp_lib_build_scripts_path": "$env{cpp_lib_build_scripts_path}",
 				"platform": "arm-none-eabi-cortex-m7",
 				"BUILD_SHARED_LIBS": false,
 				"CMAKE_SYSTEM_PROCESSOR": "arm",
