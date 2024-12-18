@@ -34,10 +34,6 @@ namespace libusb
 			_wrapped_obj = nullptr;
 		}
 
-		libusb_context *&WrappedObj() override
-		{
-			return _wrapped_obj;
-		}
 		libusb_context *WrappedObj() const override
 		{
 			return _wrapped_obj;

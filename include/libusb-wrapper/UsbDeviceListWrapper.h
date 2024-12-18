@@ -1,19 +1,19 @@
 #pragma once
-#include<functional>
-#include<libusb-wrapper/UsbContextWrapper.h>
-#include<libusb-wrapper/UsbDeviceWrapper.h>
-#include<stdint.h>
-#include<vector>
+#include <functional>
+#include <libusb-wrapper/UsbContextWrapper.h>
+#include <libusb-wrapper/UsbDeviceWrapper.h>
+#include <stdint.h>
+#include <vector>
 
-using std::vector;
 using std::function;
+using std::vector;
 
 namespace libusb
 {
 	/**
-	* @brief 设备列表。支持使用 for-in 循环，在循环中用 UsbDeviceWrapper 接收。
-	*/
-	class UsbDeviceListWrapper :public base::Wrapper<libusb_device *>
+	 * @brief 设备列表。支持使用 for-in 循环，在循环中用 UsbDeviceWrapper 接收。
+	 */
+	class UsbDeviceListWrapper : public base::Wrapper<libusb_device *>
 	{
 		libusb_device **_wrapped_obj = nullptr;
 		int64_t _count = 0;
@@ -30,20 +30,16 @@ namespace libusb
 			FreeDeviceList();
 		}
 
-		libusb_device **&WrappedObj() override
-		{
-			return _wrapped_obj;
-		}
 		libusb_device **WrappedObj() const override
 		{
 			return _wrapped_obj;
 		}
 
 		/**
-		* @brief 查找设备，将找到的设备储存到本对象中。可反复调用，多次查找。
-		* @param usb_ctx	查找设备依赖 LibusbContextWrapper。
-		* @return	找到的设备的数量。
-		*/
+		 * @brief 查找设备，将找到的设备储存到本对象中。可反复调用，多次查找。
+		 * @param usb_ctx	查找设备依赖 LibusbContextWrapper。
+		 * @return	找到的设备的数量。
+		 */
 		int64_t FindDevices(UsbContextWrapper &usb_ctx)
 		{
 			FreeDeviceList();
@@ -52,31 +48,31 @@ namespace libusb
 		}
 
 		/**
-		* @brief 最后一次调用 FindDevices 所找到的设备的数量。
-		* @return
-		*/
+		 * @brief 最后一次调用 FindDevices 所找到的设备的数量。
+		 * @return
+		 */
 		int64_t Count() const
 		{
 			return _count;
 		}
 
 		/**
-		* @brief 获取列表中的指定设备
-		* @param index
-		* @return
-		*/
+		 * @brief 获取列表中的指定设备
+		 * @param index
+		 * @return
+		 */
 		UsbDeviceWrapper operator[](int index)
 		{
-			return UsbDeviceWrapper{ _wrapped_obj[index] };
+			return UsbDeviceWrapper{_wrapped_obj[index]};
 		}
 
 		/**
-		* @brief 支持迭代。
-		* 可以在 for-in 循环中用 UsbDeviceWrapper 来接收，因为 UsbDeviceWrapper 有接受
-		* libusb_device *device 的构造函数，这会发生隐式的构造。
-		*
-		* @return
-		*/
+		 * @brief 支持迭代。
+		 * 可以在 for-in 循环中用 UsbDeviceWrapper 来接收，因为 UsbDeviceWrapper 有接受
+		 * libusb_device *device 的构造函数，这会发生隐式的构造。
+		 *
+		 * @return
+		 */
 		libusb_device **begin()
 		{
 			return _wrapped_obj;

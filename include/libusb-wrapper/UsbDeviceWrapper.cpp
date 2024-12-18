@@ -1,4 +1,4 @@
-#include<libusb-wrapper/UsbDeviceWrapper.h>
+#include <libusb-wrapper/UsbDeviceWrapper.h>
 
 using namespace libusb;
 
@@ -49,7 +49,7 @@ libusb_device_descriptor UsbDeviceWrapper::GetDescriptor()
 {
 	// 控制台输出时，输出 4 位，高位补 0 的方法：
 	// cout << std::format("{:04x}", desc.idVendor) << endl;
-	libusb_device_descriptor desc;
+	libusb_device_descriptor desc{};
 	int ret = libusb_get_device_descriptor(_wrapped_obj, &desc);
 	if (ret < 0)
 	{
@@ -74,53 +74,52 @@ void UsbDeviceWrapper::Open()
 		throw std::runtime_error(UsbErrorCodeToString(ret));
 	}
 
-	_device_handle = shared_ptr<libusb_device_handle> {
+	_device_handle = shared_ptr<libusb_device_handle>{
 		handle,
 		[](libusb_device_handle *handle)
-	{
-		libusb_close(handle);
-	}
+		{
+			libusb_close(handle);
+		},
 	};
 }
 
-int UsbDeviceWrapper::ControlTransfer(
-	USBRequestOptions request_type,
-	uint8_t request_cmd,
-	uint16_t value,
-	uint16_t index,
-	uint8_t *data,
-	uint16_t length,
-	uint32_t timeout
-)
+int UsbDeviceWrapper::ControlTransfer(USBRequestOptions request_type,
+									  uint8_t request_cmd,
+									  uint16_t value,
+									  uint16_t index,
+									  uint8_t *data,
+									  uint16_t length,
+									  uint32_t timeout)
 {
-	return libusb_control_transfer(
-		_device_handle.get(),
-		request_type,
-		request_cmd,
-		value,
-		index,
-		data,
-		length,
-		timeout
-	);
+	int result = libusb_control_transfer(_device_handle.get(),
+										 request_type,
+										 request_cmd,
+										 value,
+										 index,
+										 data,
+										 length,
+										 timeout);
+
+	return result;
 }
 
 uint16_t UsbDeviceWrapper::GetStatus()
 {
 	uint8_t status_buf[2];
-	int have_read = ControlTransfer(
-		USBRequestOptions {
-			USBRequestOptions::DataDirection::DeviceToHost,
-			USBRequestOptions::RequestType::Standard,
-			USBRequestOptions::RecipientType::Device
-		},
-		libusb_standard_request::LIBUSB_REQUEST_GET_STATUS,
-		0,
-		0,
-		status_buf,
-		sizeof(status_buf),
-		0
-	);
+
+	USBRequestOptions options{
+		USBRequestOptions::DataDirection::DeviceToHost,
+		USBRequestOptions::RequestType::Standard,
+		USBRequestOptions::RecipientType::Device,
+	};
+
+	int have_read = ControlTransfer(options,
+									libusb_standard_request::LIBUSB_REQUEST_GET_STATUS,
+									0,
+									0,
+									status_buf,
+									sizeof(status_buf),
+									0);
 
 	if (have_read != sizeof(status_buf))
 	{
@@ -134,14 +133,12 @@ int UsbDeviceWrapper::BulkTransfer(uint8_t endpoint, uint8_t *data, int length, 
 {
 	// 已传输的字节数
 	int transferred = 0;
-	int ret = libusb_bulk_transfer(
-		_device_handle.get(),
-		endpoint,
-		data,
-		length,
-		&transferred,
-		timeout
-	);
+	int ret = libusb_bulk_transfer(_device_handle.get(),
+								   endpoint,
+								   data,
+								   length,
+								   &transferred,
+								   timeout);
 
 	if (ret < 0)
 	{
@@ -165,7 +162,7 @@ std::vector<shared_ptr<UsbConfigDescriptorWrapper>> UsbDeviceWrapper::GetConfigD
 			continue;
 		}
 
-		shared_ptr<UsbConfigDescriptorWrapper> wrapper { new UsbConfigDescriptorWrapper { config } };
+		shared_ptr<UsbConfigDescriptorWrapper> wrapper{new UsbConfigDescriptorWrapper{config}};
 		config_list.push_back(wrapper);
 	}
 
