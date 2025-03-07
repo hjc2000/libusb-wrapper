@@ -1,11 +1,10 @@
 #pragma once
-#include <base/Wrapper.h>
 #include <base/container/List.h>
 #include <base/string/define.h>
-#include <iostream>
+#include <base/Wrapper.h>
 #include <libusb-1.0/libusb.h>
-#include <libusb-wrapper/USBRequestOptions.h>
 #include <libusb-wrapper/UsbConfigDescriptorWrapper.h>
+#include <libusb-wrapper/USBRequestOptions.h>
 #include <memory>
 #include <vector>
 
@@ -13,8 +12,8 @@ using std::shared_ptr;
 
 namespace libusb
 {
-	class UsbDeviceWrapper
-		: public base::Wrapper<libusb_device>
+	class UsbDeviceWrapper :
+		public base::Wrapper<libusb_device>
 	{
 	private:
 		libusb_device *_wrapped_obj = nullptr;
@@ -88,4 +87,4 @@ namespace libusb
 		void ClaimInterface(libusb_interface const &interface);
 		void ClaimInterface(int interface_number);
 	};
-}
+} // namespace libusb

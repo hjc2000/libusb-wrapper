@@ -1,23 +1,22 @@
+#include <iostream>
 #include <libusb-wrapper/UsbDeviceWrapper.h>
 
-using namespace libusb;
-
-UsbDeviceWrapper::UsbDeviceWrapper(libusb_device *device)
+libusb::UsbDeviceWrapper::UsbDeviceWrapper(libusb_device *device)
 {
 	Ref(device);
 }
 
-UsbDeviceWrapper::UsbDeviceWrapper(UsbDeviceWrapper const &other)
+libusb::UsbDeviceWrapper::UsbDeviceWrapper(UsbDeviceWrapper const &other)
 {
 	*this = other;
 }
 
-UsbDeviceWrapper::~UsbDeviceWrapper()
+libusb::UsbDeviceWrapper::~UsbDeviceWrapper()
 {
 	Unref();
 }
 
-UsbDeviceWrapper &UsbDeviceWrapper::operator=(UsbDeviceWrapper const &other)
+libusb::UsbDeviceWrapper &libusb::UsbDeviceWrapper::operator=(UsbDeviceWrapper const &other)
 {
 	Ref(other._wrapped_obj);
 	_device_handle = other._device_handle;
@@ -29,7 +28,7 @@ UsbDeviceWrapper &UsbDeviceWrapper::operator=(UsbDeviceWrapper const &other)
 ///		在引用任何设备前，会先自动调用 Unref 方法，这样如果 _wrapped_obj 原先有引用一个设备，会解除引用。
 /// </summary>
 /// <param name="device"></param>
-void UsbDeviceWrapper::Ref(libusb_device *device)
+void libusb::UsbDeviceWrapper::Ref(libusb_device *device)
 {
 	Unref();
 	_wrapped_obj = device;
@@ -39,13 +38,13 @@ void UsbDeviceWrapper::Ref(libusb_device *device)
 /// <summary>
 ///		减少 _wrapped_obj 指向的设备的引用计数，然后将 _wrapped_obj 置为空。
 /// </summary>
-void UsbDeviceWrapper::Unref()
+void libusb::UsbDeviceWrapper::Unref()
 {
 	libusb_unref_device(_wrapped_obj);
 	_wrapped_obj = nullptr;
 }
 
-libusb_device_descriptor UsbDeviceWrapper::GetDescriptor()
+libusb_device_descriptor libusb::UsbDeviceWrapper::GetDescriptor()
 {
 	// 控制台输出时，输出 4 位，高位补 0 的方法：
 	// cout << std::format("{:04x}", desc.idVendor) << endl;
@@ -59,7 +58,7 @@ libusb_device_descriptor UsbDeviceWrapper::GetDescriptor()
 	return desc;
 }
 
-void UsbDeviceWrapper::Open()
+void libusb::UsbDeviceWrapper::Open()
 {
 	if (_device_handle)
 	{
@@ -83,13 +82,13 @@ void UsbDeviceWrapper::Open()
 	};
 }
 
-int UsbDeviceWrapper::ControlTransfer(USBRequestOptions request_type,
-									  uint8_t request_cmd,
-									  uint16_t value,
-									  uint16_t index,
-									  uint8_t *data,
-									  uint16_t length,
-									  uint32_t timeout)
+int libusb::UsbDeviceWrapper::ControlTransfer(USBRequestOptions request_type,
+											  uint8_t request_cmd,
+											  uint16_t value,
+											  uint16_t index,
+											  uint8_t *data,
+											  uint16_t length,
+											  uint32_t timeout)
 {
 	int result = libusb_control_transfer(_device_handle.get(),
 										 request_type,
@@ -103,7 +102,7 @@ int UsbDeviceWrapper::ControlTransfer(USBRequestOptions request_type,
 	return result;
 }
 
-uint16_t UsbDeviceWrapper::GetStatus()
+uint16_t libusb::UsbDeviceWrapper::GetStatus()
 {
 	uint8_t status_buf[2];
 
@@ -129,7 +128,7 @@ uint16_t UsbDeviceWrapper::GetStatus()
 	return (status_buf[1] << 8) | status_buf[0];
 }
 
-int UsbDeviceWrapper::BulkTransfer(uint8_t endpoint, uint8_t *data, int length, uint32_t timeout)
+int libusb::UsbDeviceWrapper::BulkTransfer(uint8_t endpoint, uint8_t *data, int length, uint32_t timeout)
 {
 	// 已传输的字节数
 	int transferred = 0;
@@ -148,7 +147,7 @@ int UsbDeviceWrapper::BulkTransfer(uint8_t endpoint, uint8_t *data, int length, 
 	return transferred;
 }
 
-std::vector<shared_ptr<UsbConfigDescriptorWrapper>> UsbDeviceWrapper::GetConfigDescriptorList()
+std::vector<shared_ptr<libusb::UsbConfigDescriptorWrapper>> libusb::UsbDeviceWrapper::GetConfigDescriptorList()
 {
 	std::vector<shared_ptr<UsbConfigDescriptorWrapper>> config_list;
 	libusb_device_descriptor descriptor = GetDescriptor();
@@ -169,7 +168,7 @@ std::vector<shared_ptr<UsbConfigDescriptorWrapper>> UsbDeviceWrapper::GetConfigD
 	return config_list;
 }
 
-void UsbDeviceWrapper::ClaimInterface()
+void libusb::UsbDeviceWrapper::ClaimInterface()
 {
 	std::vector<shared_ptr<UsbConfigDescriptorWrapper>> config_list = GetConfigDescriptorList();
 	for (shared_ptr<UsbConfigDescriptorWrapper> &config : config_list)
@@ -178,7 +177,7 @@ void UsbDeviceWrapper::ClaimInterface()
 	}
 }
 
-void UsbDeviceWrapper::ClaimInterface(UsbConfigDescriptorWrapper &config)
+void libusb::UsbDeviceWrapper::ClaimInterface(UsbConfigDescriptorWrapper &config)
 {
 	for (uint8_t i = 0; i < config.InterfaceCount(); i++)
 	{
@@ -186,7 +185,7 @@ void UsbDeviceWrapper::ClaimInterface(UsbConfigDescriptorWrapper &config)
 	}
 }
 
-void UsbDeviceWrapper::ClaimInterface(libusb_interface const &interface)
+void libusb::UsbDeviceWrapper::ClaimInterface(libusb_interface const &interface)
 {
 	// 遍历接口中的所有设置（altsetting）
 	for (int i = 0; i < interface.num_altsetting; i++)
@@ -197,7 +196,7 @@ void UsbDeviceWrapper::ClaimInterface(libusb_interface const &interface)
 	}
 }
 
-void UsbDeviceWrapper::ClaimInterface(int interface_number)
+void libusb::UsbDeviceWrapper::ClaimInterface(int interface_number)
 {
 	int ret = libusb_claim_interface(_device_handle.get(), interface_number);
 	if (ret)
