@@ -12,10 +12,6 @@ if(1)
 	set(CMAKE_C_STANDARD 17)
 endif()
 
-include($ENV{cpp_lib_build_scripts_path}/cmake-module/setup.cmake)
-include(target_import_libusb)
-include(target_import_base)
-
 # 定义生成规则
 add_library("${ProjectName}")
 target_import_src(${ProjectName})
