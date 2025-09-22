@@ -1,7 +1,7 @@
+#include "UsbDeviceWrapper.h"
 #include "base/embedded/usb/RequestTypeOptions.h"
 #include <cstdint>
 #include <iostream>
-#include <libusb-wrapper/UsbDeviceWrapper.h>
 
 libusb::UsbDeviceWrapper::UsbDeviceWrapper(libusb_device *device)
 {

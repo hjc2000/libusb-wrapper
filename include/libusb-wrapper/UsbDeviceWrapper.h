@@ -1,10 +1,8 @@
 #pragma once
 #include "base/embedded/usb/RequestTypeOptions.h"
-#include <base/container/List.h>
-#include <base/string/define.h>
-#include <base/Wrapper.h>
-#include <libusb-1.0/libusb.h>
-#include <libusb-wrapper/UsbConfigDescriptorWrapper.h>
+#include "base/Wrapper.h"
+#include "libusb-1.0/libusb.h"
+#include "libusb-wrapper/UsbConfigDescriptorWrapper.h"
 #include <memory>
 #include <vector>
 
