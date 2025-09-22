@@ -6,7 +6,7 @@
 #include <format>
 #include <iostream>
 
-void libusb::test_libusb()
+void libusb::test::test_libusb()
 {
 	try
 	{
