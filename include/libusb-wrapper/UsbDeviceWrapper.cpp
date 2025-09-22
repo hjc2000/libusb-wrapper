@@ -1,3 +1,4 @@
+#include "base/embedded/usb/RequestTypeOptions.h"
 #include <iostream>
 #include <libusb-wrapper/UsbDeviceWrapper.h>
 
@@ -82,7 +83,7 @@ void libusb::UsbDeviceWrapper::Open()
 	};
 }
 
-int libusb::UsbDeviceWrapper::ControlTransfer(USBRequestOptions request_type,
+int libusb::UsbDeviceWrapper::ControlTransfer(base::usb::RequestTypeOptions const &request_type,
 											  uint8_t request_cmd,
 											  uint16_t value,
 											  uint16_t index,
@@ -106,10 +107,10 @@ uint16_t libusb::UsbDeviceWrapper::GetStatus()
 {
 	uint8_t status_buf[2];
 
-	USBRequestOptions options{
-		USBRequestOptions::DataDirection::DeviceToHost,
-		USBRequestOptions::RequestType::Standard,
-		USBRequestOptions::RecipientType::Device,
+	base::usb::RequestTypeOptions options{
+		base::usb::RecipientType::Device,
+		base::usb::RequestType::Standard,
+		base::usb::DataDirection::DeviceToHost,
 	};
 
 	int have_read = ControlTransfer(options,

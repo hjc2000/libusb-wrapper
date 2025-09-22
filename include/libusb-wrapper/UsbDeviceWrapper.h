@@ -1,10 +1,10 @@
 #pragma once
+#include "base/embedded/usb/RequestTypeOptions.h"
 #include <base/container/List.h>
 #include <base/string/define.h>
 #include <base/Wrapper.h>
 #include <libusb-1.0/libusb.h>
 #include <libusb-wrapper/UsbConfigDescriptorWrapper.h>
-#include <libusb-wrapper/USBRequestOptions.h>
 #include <memory>
 #include <vector>
 
@@ -55,7 +55,7 @@ namespace libusb
 		/// @return 成功则返回实际传输的缓冲区字节数。失败返回负数的错误代码。
 		/// 如果发送时就没有缓冲区，则成功时返回值等于 0.
 		/// 如果你只关心是否失败，判断返回值是否小于 0 就行了。小于 0 表示失败，否则就是成功。
-		int ControlTransfer(USBRequestOptions request_type,
+		int ControlTransfer(base::usb::RequestTypeOptions const &request_type,
 							uint8_t request_cmd,
 							uint16_t value,
 							uint16_t index,
