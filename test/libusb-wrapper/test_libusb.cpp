@@ -1,18 +1,16 @@
-#include<format>
-#include<iostream>
-#include<libusb-1.0/libusb.h>
-#include<libusb-wrapper/UsbContextWrapper.h>
-#include<libusb-wrapper/UsbDeviceListWrapper.h>
-#include<libusb-wrapper/UsbDeviceWrapper.h>
-#include<test_libusb.h>
+#include "test_libusb.h"
+#include "libusb-1.0/libusb.h"
+#include "libusb-wrapper/UsbContextWrapper.h"
+#include "libusb-wrapper/UsbDeviceListWrapper.h"
+#include "libusb-wrapper/UsbDeviceWrapper.h"
+#include <format>
+#include <iostream>
 
-using namespace libusb;
-
-void test_libusb()
+void libusb::test_libusb()
 {
 	try
 	{
-		UsbContextWrapper usb_ctx { };
+		UsbContextWrapper usb_ctx{};
 		UsbDeviceListWrapper device_list;
 		device_list.FindDevices(usb_ctx);
 		std::cout << "找到 " << device_list.Count() << " 个设备" << std::endl;
