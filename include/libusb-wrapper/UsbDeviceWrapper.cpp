@@ -1,4 +1,5 @@
 #include "base/embedded/usb/RequestTypeOptions.h"
+#include <cstdint>
 #include <iostream>
 #include <libusb-wrapper/UsbDeviceWrapper.h>
 
@@ -92,7 +93,7 @@ int libusb::UsbDeviceWrapper::ControlTransfer(base::usb::RequestTypeOptions cons
 											  uint32_t timeout)
 {
 	int result = libusb_control_transfer(_device_handle.get(),
-										 request_type,
+										 static_cast<uint8_t>(request_type),
 										 request_cmd,
 										 value,
 										 index,
