@@ -13,7 +13,7 @@ namespace libusb
 	/**
 	 * @brief 设备列表。支持使用 for-in 循环，在循环中用 UsbDeviceWrapper 接收。
 	 */
-	class UsbDeviceListWrapper : public base::Wrapper<libusb_device *>
+	class UsbDeviceListWrapper
 	{
 		libusb_device **_wrapped_obj = nullptr;
 		int64_t _count = 0;
@@ -30,7 +30,7 @@ namespace libusb
 			FreeDeviceList();
 		}
 
-		libusb_device **WrappedObj() const override
+		libusb_device **WrappedObj() const
 		{
 			return _wrapped_obj;
 		}
@@ -43,7 +43,7 @@ namespace libusb
 		int64_t FindDevices(UsbContextWrapper &usb_ctx)
 		{
 			FreeDeviceList();
-			_count = libusb_get_device_list(usb_ctx, &_wrapped_obj);
+			_count = libusb_get_device_list(usb_ctx.WrappedObj(), &_wrapped_obj);
 			return _count;
 		}
 
@@ -108,4 +108,4 @@ namespace libusb
 			return device_vector;
 		}
 	};
-}
+} // namespace libusb

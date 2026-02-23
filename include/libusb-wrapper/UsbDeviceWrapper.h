@@ -1,6 +1,5 @@
 #pragma once
 #include "base/embedded/usb/RequestTypeOptions.h"
-#include "base/Wrapper.h"
 #include "libusb-1.0/libusb.h"
 #include "libusb-wrapper/UsbConfigDescriptorWrapper.h"
 #include <memory>
@@ -10,8 +9,7 @@ using std::shared_ptr;
 
 namespace libusb
 {
-	class UsbDeviceWrapper :
-		public base::Wrapper<libusb_device>
+	class UsbDeviceWrapper
 	{
 	private:
 		libusb_device *_wrapped_obj = nullptr;
@@ -29,7 +27,7 @@ namespace libusb
 		~UsbDeviceWrapper();
 		UsbDeviceWrapper &operator=(UsbDeviceWrapper const &other);
 
-		libusb_device *WrappedObj() const override
+		libusb_device *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}

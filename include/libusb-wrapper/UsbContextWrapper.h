@@ -1,14 +1,12 @@
 #pragma once
 #include <base/string/define.h>
-#include <base/Wrapper.h>
 #include <libusb-1.0/libusb.h>
 #include <libusb-wrapper/UsbError.h>
 #include <stdexcept>
 
 namespace libusb
 {
-	class UsbContextWrapper :
-		public base::Wrapper<libusb_context>
+	class UsbContextWrapper
 	{
 	private:
 		libusb_context *_wrapped_obj;
@@ -35,9 +33,10 @@ namespace libusb
 			_wrapped_obj = nullptr;
 		}
 
-		libusb_context *WrappedObj() const override
+		libusb_context *WrappedObj() const
 		{
 			return _wrapped_obj;
 		}
 	};
+
 } // namespace libusb
